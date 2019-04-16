@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Face API</title>
+    <link rel="stylesheet" href="./dist//bootstrap.min.css">
+</head>
+<body>
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-sm-12">
+                <h3>Detected Faces With General Scoring</h3>
+                <hr/>
+                <div style="width: 400px; height: 400px; position: relative">
+                    <img src="./examples/images/bbt1.jpg" id="image" alt="" srcset="" style="width: 100%">
+                    <canvas id="canvas" style="position: absolute;top: 0;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script src="./dist/face-api.min.js"></script>
+</body>
+</html>
+
+<script>
+    const MODEL_URL = './weights';
+
+    const input = document.getElementById("image");
+
+    async function face() {
+        await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
+        const detection = await faceapi.detectAllFaces(input);
+        const detectionForSize = faceapi.resizeResults(detection,  {width: input.width, height: input.height});
+        const canvas = document.getElementById("canvas");
+        canvas.width = input.width;
+        canvas.height = input.height;
+        faceapi.drawDetection(canvas, detectionForSize, {withScore : true});
+    }
+    
+    face();
+</script>
